@@ -84,7 +84,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">infer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.2.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.3.9000</span>
       </span>
     </div>
 
@@ -157,28 +157,38 @@
       <small>Source: <a href='https://github.com/tidymodels/infer/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="infer-development-version" class="section level1">
-<h1 class="page-header" data-toc-text="development version">
-<a href="#infer-development-version" class="anchor"></a>infer (development version)<small> Unreleased </small>
+    <div id="infer-0-5-3-9000-development-version" class="section level1">
+<h1 class="page-header" data-toc-text="0.5.3.9000">
+<a href="#infer-0-5-3-9000-development-version" class="anchor"></a>infer 0.5.3.9000 (development version)<small> Unreleased </small>
+</h1>
+<p>To be released as 0.5.4.</p>
+</div>
+    <div id="infer-0-5-3" class="section level1">
+<h1 class="page-header" data-toc-text="0.5.3">
+<a href="#infer-0-5-3" class="anchor"></a>infer 0.5.3<small> 2020-07-14 </small>
 </h1>
 <div id="breaking-changes" class="section level2">
 <h2 class="hasAnchor">
 <a href="#breaking-changes" class="anchor"></a>Breaking changes</h2>
 <ul>
 <li>
-<code>get_confidence_interval()</code> now uses consistent column names (‘lower_ci’ and ‘upper_ci’) in output (<a href='https://github.com/tidymodels/infer/issues/317'>#317</a>).</li>
+<code>get_confidence_interval()</code> now uses column names (‘lower_ci’ and ‘upper_ci’) in output that are consistent with other infer functionality (<a href='https://github.com/tidymodels/infer/issues/317'>#317</a>).</li>
 </ul>
 </div>
 <div id="new-functionality" class="section level2">
 <h2 class="hasAnchor">
 <a href="#new-functionality" class="anchor"></a>New functionality</h2>
 <ul>
-<li>Implement new type <code>"bias-corrected"</code> for <code>get_confidence_interval()</code> to produce bias-corrected confidence intervals (<a href='https://github.com/tidymodels/infer/issues/237'>#237</a>, <a href='https://github.com/tidymodels/infer/issues/318'>#318</a>). Thanks to <a href='https://github.com/davidbaniadam'>@davidbaniadam</a> for initial implementation.</li>
+<li>
+<code>get_confidence_interval()</code> can now produce bias-corrected confidence intervals by setting <code>type = "bias-corrected"</code>. Thanks to <a href='https://github.com/davidbaniadam'>@davidbaniadam</a> for the initial implementation (<a href='https://github.com/tidymodels/infer/issues/237'>#237</a>, <a href='https://github.com/tidymodels/infer/issues/318'>#318</a>)!</li>
 </ul>
 </div>
 <div id="other" class="section level2">
 <h2 class="hasAnchor">
 <a href="#other" class="anchor"></a>Other</h2>
+<ul>
+<li>Fix CRAN check failures related to long double errors.</li>
+</ul>
 </div>
 </div>
     <div id="infer-0-5-2" class="section level1">
