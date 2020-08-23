@@ -210,9 +210,9 @@ default. Needed to be provided if <code>type</code> is <code>"se"</code> or <cod
 correspond to lower and upper bounds of the confidence interval.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>A null hypothesis is not required to compute a confidence interval,
-but including <code><a href='hypothesize.html'>hypothesize()</a></code> in a chain leading to <code>get_confidence_interval()</code>
-will not break anything.  This can be useful when computing a confidence
+    <p>A null hypothesis is not required to compute a confidence interval, but
+including <code><a href='hypothesize.html'>hypothesize()</a></code> in a chain leading to <code>get_confidence_interval()</code>
+will not break anything. This can be useful when computing a confidence
 interval after previously computing a p-value.</p>
     <h2 class="hasAnchor" id="aliases"><a class="anchor" href="#aliases"></a>Aliases</h2>
 
@@ -223,39 +223,35 @@ interval after previously computing a p-value.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='kw'>gss</span> <span class='op'>%&gt;%</span>
-  <span class='co'># we're interested in the number of hours worked per week</span>
+<span class='kw'>boot_distr</span> <span class='op'>&lt;-</span> <span class='kw'>gss</span> <span class='op'>%&gt;%</span>
+  <span class='co'># We're interested in the number of hours worked per week</span>
   <span class='fu'><a href='specify.html'>specify</a></span>(response = <span class='kw'>hours</span>) <span class='op'>%&gt;%</span>
-  <span class='co'># generate bootstrap samples</span>
+  <span class='co'># Generate bootstrap samples</span>
   <span class='fu'><a href='generate.html'>generate</a></span>(reps = <span class='fl'>1000</span>, type = <span class='st'>"bootstrap"</span>) <span class='op'>%&gt;%</span>
-  <span class='co'># calculate mean of each bootstrap sample</span>
-  <span class='fu'><a href='calculate.html'>calculate</a></span>(stat = <span class='st'>"mean"</span>) <span class='op'>%&gt;%</span>
-  <span class='co'># calculate the confidence interval around the point estimate</span>
+  <span class='co'># Calculate mean of each bootstrap sample</span>
+  <span class='fu'><a href='calculate.html'>calculate</a></span>(stat = <span class='st'>"mean"</span>)
+
+<span class='kw'>boot_distr</span> <span class='op'>%&gt;%</span>
+  <span class='co'># Calculate the confidence interval around the point estimate</span>
   <span class='fu'>get_confidence_interval</span>(
-    <span class='co'># at the 95% confidence level; percentile method</span>
+    <span class='co'># At the 95% confidence level; percentile method</span>
     level = <span class='fl'>0.95</span>
   )</div><div class='output co'>#&gt; # A tibble: 1 x 2
 #&gt;   lower_ci upper_ci
 #&gt;      &lt;dbl&gt;    &lt;dbl&gt;
 #&gt; 1     40.1     42.7</div><div class='input'>
-<span class='co'># for type = "se" or type = "bias-corrected" we need a point estimate</span>
+<span class='co'># For type = "se" or type = "bias-corrected" we need a point estimate</span>
 <span class='kw'>sample_mean</span> <span class='op'>&lt;-</span> <span class='kw'>gss</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='specify.html'>specify</a></span>(response = <span class='kw'>hours</span>) <span class='op'>%&gt;%</span>
   <span class='fu'><a href='calculate.html'>calculate</a></span>(stat = <span class='st'>"mean"</span>) <span class='op'>%&gt;%</span>
   <span class='kw'>dplyr</span>::<span class='fu'><a href='https://dplyr.tidyverse.org/reference/pull.html'>pull</a></span>()
 
-<span class='kw'>gss</span> <span class='op'>%&gt;%</span>
-  <span class='co'># ...we're interested in the number of hours worked per week</span>
-  <span class='fu'><a href='specify.html'>specify</a></span>(response = <span class='kw'>hours</span>) <span class='op'>%&gt;%</span>
-  <span class='co'># generating data points for a null distribution</span>
-  <span class='fu'><a href='generate.html'>generate</a></span>(reps = <span class='fl'>1000</span>, type = <span class='st'>"bootstrap"</span>) <span class='op'>%&gt;%</span>
-  <span class='co'># finding the null distribution</span>
-  <span class='fu'><a href='calculate.html'>calculate</a></span>(stat = <span class='st'>"mean"</span>) <span class='op'>%&gt;%</span>
+<span class='kw'>boot_distr</span> <span class='op'>%&gt;%</span>
   <span class='fu'>get_confidence_interval</span>(
     point_estimate = <span class='kw'>sample_mean</span>,
-    <span class='co'># at the 95% confidence level</span>
+    <span class='co'># At the 95% confidence level</span>
     level = <span class='fl'>0.95</span>,
-    <span class='co'># using the standard error method</span>
+    <span class='co'># Using the standard error method</span>
     type = <span class='st'>"se"</span>
   )</div><div class='output co'>#&gt; # A tibble: 1 x 2
 #&gt;   lower_ci upper_ci
