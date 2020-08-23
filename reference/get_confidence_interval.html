@@ -53,8 +53,8 @@
 
 
 <meta property="og:title" content="Compute confidence interval — get_confidence_interval" />
-<meta property="og:description" content="Compute a confidence interval around a summary statistic. Only
-simulation-based methods are (currently) supported.
+<meta property="og:description" content="Compute a confidence interval around a summary statistic. Currently, only
+simulation-based methods are supported.
 Learn more in vignette(&quot;infer&quot;)." />
 
 
@@ -162,8 +162,8 @@ Learn more in vignette(&quot;infer&quot;)." />
     </div>
 
     <div class="ref-description">
-    <p>Compute a confidence interval around a summary statistic. Only
-simulation-based methods are (currently) supported.</p>
+    <p>Compute a confidence interval around a summary statistic. Currently, only
+simulation-based methods are supported.</p>
 <p>Learn more in <code><a href='../articles/infer.html'>vignette("infer")</a></code>.</p>
     </div>
 
@@ -208,6 +208,12 @@ default. Needed to be provided if <code>type</code> is <code>"se"</code> or <cod
 
     <p>A 1 x 2 tibble with 'lower_ci' and 'upper_ci' columns. Values
 correspond to lower and upper bounds of the confidence interval.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>A null hypothesis is not required to compute a confidence interval,
+but including <code><a href='hypothesize.html'>hypothesize()</a></code> in a chain leading to <code>get_confidence_interval()</code>
+will not break anything.  This can be useful when computing a confidence
+interval after previously computing a p-value.</p>
     <h2 class="hasAnchor" id="aliases"><a class="anchor" href="#aliases"></a>Aliases</h2>
 
     
@@ -217,24 +223,36 @@ correspond to lower and upper bounds of the confidence interval.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='co'># find the point estimate---mean number of hours worked per week</span>
-<span class='kw'>point_estimate</span> <span class='op'>&lt;-</span> <span class='kw'>gss</span> <span class='op'>%&gt;%</span>
+<span class='kw'>gss</span> <span class='op'>%&gt;%</span>
+  <span class='co'># we're interested in the number of hours worked per week</span>
+  <span class='fu'><a href='specify.html'>specify</a></span>(response = <span class='kw'>hours</span>) <span class='op'>%&gt;%</span>
+  <span class='co'># generate bootstrap samples</span>
+  <span class='fu'><a href='generate.html'>generate</a></span>(reps = <span class='fl'>1000</span>, type = <span class='st'>"bootstrap"</span>) <span class='op'>%&gt;%</span>
+  <span class='co'># calculate mean of each bootstrap sample</span>
+  <span class='fu'><a href='calculate.html'>calculate</a></span>(stat = <span class='st'>"mean"</span>) <span class='op'>%&gt;%</span>
+  <span class='co'># calculate the confidence interval around the point estimate</span>
+  <span class='fu'>get_confidence_interval</span>(
+    <span class='co'># at the 95% confidence level; percentile method</span>
+    level = <span class='fl'>0.95</span>
+  )</div><div class='output co'>#&gt; # A tibble: 1 x 2
+#&gt;   lower_ci upper_ci
+#&gt;      &lt;dbl&gt;    &lt;dbl&gt;
+#&gt; 1     40.1     42.7</div><div class='input'>
+<span class='co'># for type = "se" or type = "bias-corrected" we need a point estimate</span>
+<span class='kw'>sample_mean</span> <span class='op'>&lt;-</span> <span class='kw'>gss</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='specify.html'>specify</a></span>(response = <span class='kw'>hours</span>) <span class='op'>%&gt;%</span>
   <span class='fu'><a href='calculate.html'>calculate</a></span>(stat = <span class='st'>"mean"</span>) <span class='op'>%&gt;%</span>
   <span class='kw'>dplyr</span>::<span class='fu'><a href='https://dplyr.tidyverse.org/reference/pull.html'>pull</a></span>()
 
-<span class='co'># starting with the gss dataset</span>
 <span class='kw'>gss</span> <span class='op'>%&gt;%</span>
   <span class='co'># ...we're interested in the number of hours worked per week</span>
   <span class='fu'><a href='specify.html'>specify</a></span>(response = <span class='kw'>hours</span>) <span class='op'>%&gt;%</span>
-  <span class='co'># hypothesizing that the mean is 40</span>
-  <span class='fu'><a href='hypothesize.html'>hypothesize</a></span>(null = <span class='st'>"point"</span>, mu = <span class='fl'>40</span>) <span class='op'>%&gt;%</span>
   <span class='co'># generating data points for a null distribution</span>
   <span class='fu'><a href='generate.html'>generate</a></span>(reps = <span class='fl'>1000</span>, type = <span class='st'>"bootstrap"</span>) <span class='op'>%&gt;%</span>
   <span class='co'># finding the null distribution</span>
   <span class='fu'><a href='calculate.html'>calculate</a></span>(stat = <span class='st'>"mean"</span>) <span class='op'>%&gt;%</span>
   <span class='fu'>get_confidence_interval</span>(
-    point_estimate = <span class='kw'>point_estimate</span>,
+    point_estimate = <span class='kw'>sample_mean</span>,
     <span class='co'># at the 95% confidence level</span>
     level = <span class='fl'>0.95</span>,
     <span class='co'># using the standard error method</span>
@@ -242,12 +260,12 @@ correspond to lower and upper bounds of the confidence interval.</p>
   )</div><div class='output co'>#&gt; # A tibble: 1 x 2
 #&gt;   lower_ci upper_ci
 #&gt;      &lt;dbl&gt;    &lt;dbl&gt;
-#&gt; 1     40.1     42.7</div><div class='input'>  
+#&gt; 1     40.1     42.7</div><div class='input'>
 <span class='co'># More in-depth explanation of how to use the infer package</span>
 <span class='co'>if</span> (<span class='fl'>FALSE</span>) {
 <span class='fu'><a href='https://rdrr.io/r/utils/vignette.html'>vignette</a></span>(<span class='st'>"infer"</span>)
-} 
- </div></pre>
+}
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
